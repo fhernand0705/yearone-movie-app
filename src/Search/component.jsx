@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { apiKey } from '../apiKey';
 
 const Search = () => {
-    const [searchTerm, setSearchTerm] = useState('');
+    const [query, setQuery] = useState('');
+    const [movie, setMovie] = useState('');
+
+    useEffect(() => {
+        // use try/catch block
+        let isMounted = true;
+        const fetchMovie = async () => {
+            const response = await axios.get(`http://www.omdbapi.com/?t=${query}&apikey=${apiKey}`)
+            
+            if (isMounted) setMovie(response.data.Title)
+            
+            return null;
+        }
+        
+        handleSubmit(fetchMovie)
+        
+        return () => isMounted = false; 
+
+    }, [query])
+
+    const handleSubmit = (fetchMovie) => fetchMovie()
 
     return (
         <div data-testid="search-component">
             <input 
                 type="text" 
-                value={searchTerm} 
+                value={query} 
                 data-testid="input-field"
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={(e) => setQuery(e.target.value)}
             />
-            <button data-testid="submit-button">Search</button>
+            <button 
+                data-testid="submit-button"
+                onClick={() => handleSubmit()}
+                >
+                Search
+            </button>
+            <div data-testid="movie-title">{movie}</div>
         </div>
     )
 }
