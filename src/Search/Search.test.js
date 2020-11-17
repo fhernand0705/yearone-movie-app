@@ -10,8 +10,8 @@ import Search from './component';
 const setup = () => render(<Search />);
 
 const server = setupServer(
-    rest.get('http://www.omdbapi.com/?t=avengers:+endgame&apikey=a2114aab', (req, res, ctx) => {
-        return res(ctx.json({ Title: "Avengers: Endgame" }))
+    rest.get(`http://www.omdbapi.com/?s=avengers&apikey=${apiKey}&page=1`, (req, res, ctx) => {
+        return res(ctx.json({ Search: [{ Title: "Avengers: Endgame"}, { Title: "The Avengers"}] }))
     })
 )
 
@@ -36,8 +36,12 @@ describe("search component", () => {
         const submitBtn = screen.getByTestId("submit-button");
         expect(submitBtn).toBeInTheDocument();
     })
-})
 
+    test("renders form", () => {
+        const form = screen.getByTestId("form");
+        expect(form).toBeInTheDocument()
+    })
+})
 
 describe("input field", () => {
     beforeEach(() => setup());
@@ -56,9 +60,14 @@ describe("input field", () => {
 })
 
 describe("mock server for api requests", () => {
-    test("loads and renders movie title", async () => {
-        setup()
-        screen.getByTestId("movie-title")    
-        await waitFor(() => expect(screen.getByTestId("movie-title").textContent).toBe("Avengers: Endgame"))
+    beforeEach(() => setup());
+
+    test("submitting form renders list of movies", async () => {
+        const form = screen.getByTestId("form");
+        const movies = screen.getByTestId("movie-title");
+        
+        userEvent.click(form)
+
+        await waitFor(() => expect(movies.children.length).toBeGreaterThan(0))
     })
 })

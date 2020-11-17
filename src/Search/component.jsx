@@ -3,43 +3,55 @@ import axios from 'axios';
 import { apiKey } from '../apiKey';
 
 const Search = () => {
-    const [query, setQuery] = useState('');
-    const [movie, setMovie] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [inputValue, setInputValue] = useState('')
+    const [movies, setMovies] = useState([]);
 
     useEffect(() => {
         // use try/catch block
         let isMounted = true;
         const fetchMovie = async () => {
-            const response = await axios.get(`http://www.omdbapi.com/?t=${query}&apikey=${apiKey}`)
+            const response = await axios.get(
+                `http://www.omdbapi.com/?s=${searchQuery}&apikey=${apiKey}&page=1`
+            )
             
-            if (isMounted) setMovie(response.data.Title)
+            if (isMounted) setMovies(response.data.Search)
             
             return null;
         }
         
-        handleSubmit(fetchMovie)
-        
+        fetchMovie();
+
         return () => isMounted = false; 
 
-    }, [query])
+    }, [searchQuery])
 
-    const handleSubmit = (fetchMovie) => fetchMovie()
+    const handleSubmit = (e) => {
+        e.preventDefault()
+
+        setSearchQuery(inputValue)
+        setInputValue('')
+    }
 
     return (
         <div data-testid="search-component">
-            <input 
-                type="text" 
-                value={query} 
-                data-testid="input-field"
-                onChange={(e) => setQuery(e.target.value)}
-            />
-            <button 
-                data-testid="submit-button"
-                onClick={() => handleSubmit()}
-                >
-                Search
-            </button>
-            <div data-testid="movie-title">{movie}</div>
+            <form onSubmit={handleSubmit} data-testid="form">
+                <input 
+                    type="text" 
+                    value={inputValue} 
+                    data-testid="input-field"
+                    onChange={(e) => setInputValue(e.target.value)}
+                />
+                <button data-testid="submit-button">
+                    Search
+                </button>
+            </form>
+           
+            <div data-testid="movie-title">
+                {movies && movies.map(({Title, imdbID: id}) => 
+                   <li key={id}>{Title}</li> 
+                )}
+            </div>
         </div>
     )
 }
