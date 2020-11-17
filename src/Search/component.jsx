@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { apiKey } from '../apiKey';
 
@@ -37,7 +38,7 @@ const Search = () => {
         setSearchQuery(inputValue)
         setInputValue('')
     }
-
+    console.log(movies)
     return (
         <div data-testid="search-component">
             <form onSubmit={handleSubmit} data-testid="form">
@@ -53,9 +54,13 @@ const Search = () => {
             </form>
            
             <div data-testid="movies-container">
-                {movies && movies.map(({ Title }) => 
-                   <li key={Title}>{Title}</li> 
-
+                {movies && movies.map(({ Title, Year, imdbID: id }) => 
+                    <ul>
+                        <Link to={`/profile/${id}`}>
+                            <li key={Title}>{Title}</li> 
+                        </Link> 
+                        <li key={Title}>{Year}</li>
+                    </ul>
                 )}
             </div>
             {error && <div data-testid="error-message">{error}</div>}

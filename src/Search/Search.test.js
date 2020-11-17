@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node'; 
-import { apiKey } from '../apiKey'
+import { apiKey } from '../apiKey';
 
 import Search from './component';
 
@@ -75,10 +75,10 @@ describe("mock server for api requests", () => {
                 return res(ctx.status(500))
             })
         )
-        await waitFor(() => screen.getByTestId("error-message"))
+        const error = screen.getByTestId("error-message");
         await waitFor(() => {
-            expect(screen.getByTestId("error-message")).toBeInTheDocument();
-            expect(screen.getByTestId("error-message")).toBe("Network Error")
+            expect(error).toBeInTheDocument();
+            expect(error).toBe("Network Error")
         })
     })
 })
