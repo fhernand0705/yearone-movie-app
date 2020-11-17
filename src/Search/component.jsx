@@ -4,20 +4,25 @@ import { apiKey } from '../apiKey';
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
-    const [inputValue, setInputValue] = useState('')
+    const [inputValue, setInputValue] = useState('');
     const [movies, setMovies] = useState([]);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        // use try/catch block
         let isMounted = true;
+
         const fetchMovie = async () => {
-            const response = await axios.get(
-                `http://www.omdbapi.com/?s=${searchQuery}&apikey=${apiKey}&page=1`
-            )
-            
-            if (isMounted) setMovies(response.data.Search)
-            
-            return null;
+            try {
+                    const { data } = await axios.get(
+                        `http://www.omdbapi.com/?s=${searchQuery}&apikey=${apiKey}&page=1`
+                    )
+                    
+                    if (isMounted) setMovies(data.Search)
+                    
+                    return null;
+            } catch (err) {
+                if (err) setError(err.message)
+            }    
         }
         
         fetchMovie();
@@ -42,16 +47,18 @@ const Search = () => {
                     data-testid="input-field"
                     onChange={(e) => setInputValue(e.target.value)}
                 />
-                <button data-testid="submit-button">
+                <button type="submit" data-testid="submit-button">
                     Search
                 </button>
             </form>
            
-            <div data-testid="movie-title">
-                {movies && movies.map(({Title, imdbID: id}) => 
-                   <li key={id}>{Title}</li> 
+            <div data-testid="movies-container">
+                {movies && movies.map(({ Title }) => 
+                   <li key={Title}>{Title}</li> 
+
                 )}
             </div>
+            {error && <div data-testid="error-message">{error}</div>}
         </div>
     )
 }
