@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { apiKey } from '../apiKey';
+import { getMovies } from '../services/apiService';
 
 const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -12,11 +11,9 @@ const Search = () => {
     useEffect(() => {
         let isMounted = true;
 
-        const fetchMovie = async () => {
+        const fetchMovies = async () => {
             try {
-                    const { data } = await axios.get(
-                        `http://www.omdbapi.com/?s=${searchQuery}&apikey=${apiKey}&page=1`
-                    )
+                    const { data } = await getMovies(searchQuery)
                     
                     if (isMounted) setMovies(data.Search)
                     
@@ -26,7 +23,7 @@ const Search = () => {
             }    
         }
         
-        fetchMovie();
+        fetchMovies();
 
         return () => isMounted = false; 
 
@@ -38,7 +35,7 @@ const Search = () => {
         setSearchQuery(inputValue)
         setInputValue('')
     }
-    console.log(movies)
+
     return (
         <div data-testid="search-component">
             <form onSubmit={handleSubmit} data-testid="form">
@@ -54,12 +51,12 @@ const Search = () => {
             </form>
            
             <div data-testid="movies-container">
-                {movies && movies.map(({ Title, Year, imdbID: id }) => 
+                {movies && movies.map(({ Title, Year, imdbID: id }, i) => 
                     <ul>
                         <Link to={`/profile/${id}`}>
-                            <li key={Title}>{Title}</li> 
+                            <li key={id}>{Title}</li> 
                         </Link> 
-                        <li key={Title}>{Year}</li>
+                        <li key={id}>{Year}</li>
                     </ul>
                 )}
             </div>

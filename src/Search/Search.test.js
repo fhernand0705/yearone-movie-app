@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node'; 
 import { apiKey } from '../apiKey';
+import { MemoryRouter } from 'react-router-dom';
 
 import Search from './component';
 
@@ -19,7 +20,7 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-const setup = () => render(<Search />);
+const setup = () => render(<MemoryRouter><Search /></MemoryRouter>);
 
 describe("search component", () => {
     beforeEach(() => setup()); 
