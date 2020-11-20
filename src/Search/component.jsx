@@ -14,22 +14,31 @@ const Search = () => {
 
         const fetchMovies = async () => {
             try {
-                const { data } = await getMovies(searchQuery)
+                const storedMovies = localStorage.getItem("storedMovies");
                 
-                if (isMounted) setMovies(data.Search)
+                if (storedMovies && !searchQuery) {
+                    setMovies(JSON.parse(storedMovies))
+                } else {
+                    if (isMounted) {
+                        const { data } = await getMovies(searchQuery)
+                        localStorage.setItem("storedMovies", JSON.stringify(data.Search))
+                        setMovies(data.Search)  
+                    } 
+                }
                 
                 return null;
             } catch (err) {
                 if (err) setError(err.message)
             }    
-        }
+        }   
         
         fetchMovies();
-        renderLocalCount()
+        renderLocalCount();
 
         return () => isMounted = false; 
 
     }, [searchQuery])
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -39,7 +48,7 @@ const Search = () => {
     }
 
     function renderLocalCount() {
-        let i = 0; 
+        let i = 0;
         const movieTitles = [];
 
         while (i < localStorage.length) {
@@ -80,7 +89,7 @@ const Search = () => {
             
             <div data-testid="movies-container">
                 {movies && movies.map(({ Title, Year, imdbID: id }, i) => 
-                    <ul>
+                    <ul key={id}>
                         <Link to={`/profile/${id}`}>
                             <li key={id}>{Title}</li> 
                         </Link> 

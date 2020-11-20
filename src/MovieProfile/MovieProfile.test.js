@@ -5,7 +5,7 @@ import { rest } from 'msw';
 import { setupServer } from 'msw/node'; 
 import { apiKey } from '../apiKey';
 
-import Profile from './component';
+import MovieProfile from './component';
 import { MemoryRouter } from 'react-router-dom';
 
 const endpoint = `http://www.omdbapi.com/?i=tt0133093&apikey=${apiKey}`
@@ -23,7 +23,7 @@ afterAll(() => server.close())
 const setup = () => {
     render(
         <MemoryRouter>
-            <Profile />
+            <MovieProfile />
         </MemoryRouter>
     )
 } 
@@ -75,7 +75,7 @@ describe("mock server for api requests", () => {
         
         render(
             <MemoryRouter>
-                <Profile />
+                <MovieProfile />
             </MemoryRouter>
         )
 
