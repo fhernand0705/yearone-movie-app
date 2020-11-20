@@ -76,10 +76,14 @@ describe("mock server for api requests", () => {
                 return res(ctx.status(500))
             })
         )
-        const error = screen.getByTestId("error-message");
-        await waitFor(() => {
-            expect(error).toBeInTheDocument();
-            expect(error).toBe("Network Error")
-        })
+
+        render(
+            <MemoryRouter>
+                <Search />
+            </MemoryRouter>
+        )
+
+        const error = await waitFor(() => screen.getByTestId("error-message"));     
+        expect(error).toBeInTheDocument();
     })
 })

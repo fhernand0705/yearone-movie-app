@@ -6,9 +6,7 @@ import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 const Profile = () => {
     const [movie, setMovie] = useState({})
     const [thumbsUp, setThumbsUp] = useState(false)
-    // remove thumbsUpCount state
-    const [thumbsUpCount, setThumbsUpCount] = useState(0)
-    // define state for network errors
+    const [error, setError] = useState('')
     const { id } = useParams();
     const history = useHistory()
     const currentMovieUpCount = +localStorage.getItem(movie.Title)
@@ -16,10 +14,14 @@ const Profile = () => {
     useEffect(() => {
         let isMounted = true; 
         const fetchMovie = async () => {
-            const { data } = await getMovie(id);
-            if (isMounted) setMovie(data);
-
-            return null; 
+            try {
+                const { data } = await getMovie(id);
+                if (isMounted) setMovie(data);
+    
+                return null;
+            } catch(err) {
+                if (err) setError(err.message)
+            } 
         }
 
         fetchMovie()
@@ -48,7 +50,7 @@ const Profile = () => {
 
     const renderCount = () => {
         const localCount = localStorage.getItem(movie.Title)
-        return localCount ? <div>{movie.Title}: {localCount}</div> : null;
+        return localCount ? <div>{movie.Title}: {localCount}</div> : 0;
     }
 
     const renderThumbsUp = () => {
@@ -75,13 +77,14 @@ const Profile = () => {
                     {movie && 
                         <>  
                             <span>{renderThumbsUp()}</span>
-                            <div data-testid="count">{thumbsUpCount ? renderCount() : null}</div>
+                            <div data-testid="count">{thumbsUp ? renderCount() : null}</div>
                         
                             <div>{movie.Title}</div>
                             <div>{movie.Year}</div>
                         </>
                     }
                 </div>
+                {error && <div data-testid="error-message">{error}</div>}
             </div>
         )
 }

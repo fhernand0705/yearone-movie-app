@@ -8,8 +8,10 @@ import { apiKey } from '../apiKey';
 import Profile from './component';
 import { MemoryRouter } from 'react-router-dom';
 
+const endpoint = `http://www.omdbapi.com/?i=tt0133093&apikey=${apiKey}`
+
 const server = setupServer(
-    rest.get(`http://www.omdbapi.com/?i=tt0133093&apikey=${apiKey}`, (req, res, ctx) => {
+    rest.get(endpoint, (req, res, ctx) => {
         return res(ctx.json({ Title: "The Matrix" }))
     })
 )
@@ -64,22 +66,37 @@ describe("mock server for api requests", () => {
         await waitFor(() => expect(movieDetails.children.length).toBeGreaterThan(0))
     })
 
-    // test => handles server errors
-})
+    test("handles server errors", async () => {
+        server.use(
+            rest.get(endpoint, (req, res, ctx) => {
+                return res(ctx.status(500))
+            })
+        )
+        
+        render(
+            <MemoryRouter>
+                <Profile />
+            </MemoryRouter>
+        )
 
-describe("thumbs up count value", () => {
-    beforeEach(() => setup())
-
-    test("count state has a default value of 0", () => {
-        const counter = screen.getByTestId("count")
-        expect(counter).toHaveTextContent(0)
-    })
-
-    test("clicking thumbs up increments count state", () => {
-        const counter = screen.getByTestId("count");
-        const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
-
-        userEvent.click(thumbsUpClear);
-        expect(counter).toHaveTextContent(1);
+        const errMessage = await waitFor(() => screen.getByTestId("error-message"));
+        expect(errMessage).toBeInTheDocument()
     })
 })
+
+// describe("thumbs up count value", () => {
+//     beforeEach(() => setup())
+
+//     test("count state has a default value of 0", () => {
+//         const counter = screen.getByTestId("count")
+//         expect(counter).toHaveTextContent(0)
+//     })
+
+//     test("clicking thumbs up increments count state", () => {
+//         const counter = screen.getByTestId("count");
+//         const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
+
+//         userEvent.click(thumbsUpClear);
+//         expect(counter).toHaveTextContent(1);
+//     })
+// })
