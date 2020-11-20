@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { getMovie } from '../services/apiService';
+import { useParams, useHistory } from 'react-router-dom';
+import { getMovie } from '../movieService';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 
 const Profile = () => {
     const [movie, setMovie] = useState({})
     const [thumbsUp, setThumbsUp] = useState(false)
-    const [counter, setCounter] = useState(0)
+    // remove thumbsUpCount state
+    const [thumbsUpCount, setThumbsUpCount] = useState(0)
     // define state for network errors
     const { id } = useParams();
+    const history = useHistory()
+    const currentMovieUpCount = +localStorage.getItem(movie.Title)
 
     useEffect(() => {
         let isMounted = true; 
@@ -24,11 +27,28 @@ const Profile = () => {
         return () => isMounted = false; 
     }, [id])
 
+
     const handleThumbsUp = () => {
         setThumbsUp(up => !up);
 
-        if (counter) setCounter(counter => counter - 1)
-            else setCounter(counter => counter + 1)
+        if (thumbsUp) {            
+            if (currentMovieUpCount) {
+                localStorage.setItem(movie.Title, currentMovieUpCount - 1)
+            } 
+        } 
+
+        if (!thumbsUp) {
+            if (currentMovieUpCount) {
+                localStorage.setItem(movie.Title, currentMovieUpCount + 1)
+            } else {
+                localStorage.setItem(movie.Title, +"1")
+            }
+        }    
+    }
+
+    const renderCount = () => {
+        const localCount = localStorage.getItem(movie.Title)
+        return localCount ? <div>{movie.Title}: {localCount}</div> : null;
     }
 
     const renderThumbsUp = () => {
@@ -41,16 +61,22 @@ const Profile = () => {
                                     onClick={() => handleThumbsUp()}    
                                />
         
+        if (currentMovieUpCount && !thumbsUp) {
+            setThumbsUp(true)
+        }
+        
         return !thumbsUp ? thumbsUpClear : thumbsUpFilled;
     }
 
     return (
             <div data-testid="profile-component">
+                <button onClick={() => history.push('/')}>Back</button>
                 <div data-testid="movie-details">
                     {movie && 
                         <>  
                             <span>{renderThumbsUp()}</span>
-                            <div data-testid="counter">{counter}</div>
+                            <div data-testid="count">{thumbsUpCount ? renderCount() : null}</div>
+                        
                             <div>{movie.Title}</div>
                             <div>{movie.Year}</div>
                         </>

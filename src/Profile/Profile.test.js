@@ -67,16 +67,16 @@ describe("mock server for api requests", () => {
     // test => handles server errors
 })
 
-describe("thumbs up counter value", () => {
+describe("thumbs up count value", () => {
     beforeEach(() => setup())
 
-    test("counter state has a default value of 0", () => {
-        const counter = screen.getByTestId("counter")
+    test("count state has a default value of 0", () => {
+        const counter = screen.getByTestId("count")
         expect(counter).toHaveTextContent(0)
     })
 
-    test("clicking thumbs up increments counter state", () => {
-        const counter = screen.getByTestId("counter");
+    test("clicking thumbs up increments count state", () => {
+        const counter = screen.getByTestId("count");
         const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
 
         userEvent.click(thumbsUpClear);
