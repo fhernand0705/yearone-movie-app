@@ -6,7 +6,6 @@ const Search = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [inputValue, setInputValue] = useState('');
     const [movies, setMovies] = useState([]);
-    const [localMovies, setLocalMovies] = useState([])
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -33,7 +32,6 @@ const Search = () => {
         }   
         
         fetchMovies();
-        renderLocalCount();
 
         return () => isMounted = false; 
 
@@ -45,29 +43,6 @@ const Search = () => {
 
         setSearchQuery(inputValue)
         setInputValue('')
-    }
-
-    function renderLocalCount() {
-        let i = 0;
-        const movieTitles = [];
-
-        while (i < localStorage.length) {
-            movieTitles.push({
-                title: localStorage.key(i),
-                count: localStorage.getItem(localStorage.key(i))
-            })
-            i++
-        }
-
-        setLocalMovies(movieTitles)
-    }
-    
-    const renderCount = () => {
-        return (
-            localMovies.filter(movie => {
-                return movie.count > 0
-            }).map(movie => <li>{movie.title}: {movie.count}</li>)
-        )
     }
 
     return (
@@ -83,11 +58,8 @@ const Search = () => {
                     Search
                 </button>
             </form>
-            <div>
-                {renderCount()}
-            </div>
-            
             <div data-testid="movies-container">
+                {/* extract movie details to new component */}
                 {movies && movies.map(({ Title, Year, imdbID: id }, i) => 
                     <ul key={id}>
                         <Link to={`/profile/${id}`}>
