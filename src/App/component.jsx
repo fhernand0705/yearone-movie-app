@@ -7,12 +7,12 @@ import MoviesTable from '../MoviesTable/component'
 
 function App() {
   return (
-    <div data-testid="app-component">
+    <div data-testid="app-component" className="bg-gray-50 h-screen">
       <Router data-testid="react-router">
         {/* extract navbar to a new component */}
         <nav className="flex justify-center m-2 space-x-6">
-          <Link to="/" className="p-2 text-gray-800 hover:text-gray-400">Search</Link>
-          <Link to="/movies-table" className="p-2 text-gray-800 hover:text-gray-400">Movies Table</Link>
+          <Link to="/" className="p-2 text-gray-800 hover:text-gray-400">Search Movies</Link>
+          <Link to="/movies-table" className="p-2 text-gray-800 hover:text-gray-400">Movies Data Table</Link>
         </nav>
         <Switch>
           <Route exact path="/" render={() => <Search />}/>  
