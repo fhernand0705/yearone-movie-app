@@ -3,7 +3,9 @@ import * as React from 'react';
 const MoviesTable = () => {
     const [storedMovies, setStoredMovies] = React.useState([])
 
-    React.useEffect(() => getStoredMovies(), [storedMovies])
+    React.useEffect(() => {
+        getStoredMovies()
+    }, [])
 
     const getStoredMovies = () => {
         let i = 0;
