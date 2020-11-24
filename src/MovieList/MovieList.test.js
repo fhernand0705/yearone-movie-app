@@ -6,7 +6,7 @@ import { setupServer } from 'msw/node';
 import { apiKey } from '../apiKey';
 import { MemoryRouter } from 'react-router-dom';
 
-import Search from './component';
+import MovieList from './component';
 
 const endpoint = `http://www.omdbapi.com/?s=avengers&apikey=${apiKey}&page=1`;
 
@@ -20,14 +20,14 @@ beforeAll(() => server.listen())
 afterEach(() => server.resetHandlers())
 afterAll(() => server.close())
 
-const setup = () => render(<MemoryRouter><Search /></MemoryRouter>);
+const setup = () => render(<MemoryRouter><MovieList /></MemoryRouter>);
 
-describe("search component", () => {
+describe("movie list component", () => {
     beforeEach(() => setup()); 
 
     test("renders without errors", () => {
-        const searchComponent = screen.getByTestId("search-component");
-        expect(searchComponent).toBeInTheDocument();
+        const movieListComponent = screen.getByTestId("movie-list-component");
+        expect(movieListComponent).toBeInTheDocument();
     })
     
     test("renders input field", () => {
@@ -79,7 +79,7 @@ describe("mock server for api requests", () => {
 
         render(
             <MemoryRouter>
-                <Search />
+                <MovieList />
             </MemoryRouter>
         )
 

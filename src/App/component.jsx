@@ -4,7 +4,7 @@ import './style.css';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { BiData } from 'react-icons/bi';
 
-import Search from '../Search/component';
+import MovieList from '../MovieList/component';
 import MovieProfile from '../MovieProfile/component';
 import MoviesTable from '../MoviesTable/component'
 
@@ -24,7 +24,7 @@ function App() {
           </Link>
         </nav>
         <Switch>
-          <Route exact path="/" render={() => <Search />}/>  
+          <Route exact path="/" render={() => <MovieList />}/>  
           <Route path="/profile/:id" render={() => <MovieProfile />} />
           <Route path="/movies-table" render={() => <MoviesTable />} />
         </Switch>
