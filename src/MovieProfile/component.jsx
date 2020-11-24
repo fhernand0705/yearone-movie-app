@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getMovie } from '../movieService';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
 
@@ -8,7 +8,7 @@ const Profile = () => {
     const [thumbsUp, setThumbsUp] = useState(false)
     const [error, setError] = useState('')
     const { id } = useParams();
-    const history = useHistory()
+    //const history = useHistory()
     const currentMovieUpCount = +localStorage.getItem(movie.Title)
 
     useEffect(() => {
@@ -48,11 +48,6 @@ const Profile = () => {
         }    
     }
 
-    const renderCount = () => {
-        const localCount = localStorage.getItem(movie.Title)
-        return localCount ? <div>{movie.Title}: {localCount}</div> : 0;
-    }
-
     const renderThumbsUp = () => {
         const thumbsUpClear = <FaRegThumbsUp 
                                     data-testid="thumbs-up-clear"
@@ -69,19 +64,33 @@ const Profile = () => {
         
         return !thumbsUp ? thumbsUpClear : thumbsUpFilled;
     }
-
+console.log(movie)
     return (
-            <div data-testid="profile-component">
-                <button onClick={() => history.push('/')}>Back</button>
-                <div data-testid="movie-details">
+            <div data-testid="profile-component" className="my-32">
+                {/* <button onClick={() => history.push('/')} className="text-gray-500 text-base">
+                    <BsArrowBarLeft />
+                    Back
+                </button> */}
+                <div data-testid="movie-details" className="flex justify-center my-10">
                     {movie && 
-                        <>  
-                            <span>{renderThumbsUp()}</span>
-                            <div data-testid="count">{thumbsUp ? renderCount() : null}</div>
-                        
-                            <div>{movie.Title}</div>
-                            <div>{movie.Year}</div>
-                        </>
+                    <>
+                        <img src={movie.Poster} alt={`${movie.Poster}'s poster`} className="rounded-lg mx-5"/>
+                        <section className="flex flex-col w-max">
+                            <div className="text-indigo-500 text-xl flex my-5 uppercase">
+                                {movie.Title} 
+                                <span className="mx-5 my-1 text-lg">
+                                    {renderThumbsUp()}
+                                </span>
+                            </div>
+                            <div className="text-gray-600 leading-relaxed">
+                                <div>{movie.Year}</div>
+                                <div>{movie.Director}</div>
+                                <div>{movie.Genre}</div>
+                                <div>{`imdbRating: ${movie.imdbRating}`}</div>
+                                <div className="w-48 my-5">{movie.Plot}</div>
+                            </div>
+                        </section>
+                    </>
                     }
                 </div>
                 {error && <div data-testid="error-message">{error}</div>}

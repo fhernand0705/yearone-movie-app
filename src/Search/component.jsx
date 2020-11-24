@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineSearch } from 'react-icons/ai'
+import { AiOutlineSearch } from 'react-icons/ai';
 import { getMovies } from '../movieService';
 
 const Search = () => {
@@ -66,7 +66,7 @@ const Search = () => {
             <div data-testid="movies-container" className="grid grid-cols-3 gap-4 m-5">
                 {/* extract movie details to new component */}
                 {movies && movies.map(({ Title, Year, imdbID: id, Poster }, i) => 
-                    <ul key={id} className="flex flex-col rounded-lg items-center">
+                    <ul key={id} className="flex flex-col rounded-lg items-center transition duration-500 ease-in-out">
                         <li>
                             <img src={Poster} alt={`${Title}'s poster`} className="w-72 rounded-lg"/>
                         </li>
