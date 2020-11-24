@@ -47,7 +47,7 @@ const Search = () => {
     }
 
     return (
-        <div data-testid="search-component">
+        <div data-testid="search-component" className="my-28">
             <form onSubmit={handleSubmit} data-testid="form" className="flex justify-center my-12">
                 <AiOutlineSearch className="text-2xl my-1 text-gray-400" />
                 <input 
