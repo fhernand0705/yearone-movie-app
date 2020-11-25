@@ -9,13 +9,18 @@ const MoviesTable = () => {
 
     const getStoredMovies = () => {
         let i = 0;
+        let localKey; 
         const movies = [];
 
         while (i < localStorage.length) {
-            movies.push({
-                title: localStorage.key(i),
-                count: localStorage.getItem(localStorage.key(i))
-            })
+            localKey = localStorage.key(i)
+
+            if (localKey !== "storedMovies") {
+                movies.push({
+                    title: localKey,
+                    count: localStorage.getItem(localKey)
+                })
+            }
             i++
         }
         setStoredMovies(movies)

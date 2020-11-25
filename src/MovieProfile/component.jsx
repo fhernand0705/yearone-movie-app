@@ -2,14 +2,16 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovie } from '../movieService';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
-import { FiAlertCircle } from 'react-icons/fi'
+
+import ErrorMessage from '../ErrorMessage/component';
 
 const Profile = () => {
-    const [movie, setMovie] = React.useState({})
-    const [thumbsUp, setThumbsUp] = React.useState(false)
-    const [error, setError] = React.useState('')
+    const [movie, setMovie] = React.useState({});
+    const [thumbsUp, setThumbsUp] = React.useState(false);
+    const [error, setError] = React.useState('');
+    
     const { id } = useParams();
-    const currentMovieUpCount = +localStorage.getItem(movie.Title)
+    const currentMovieUpCount = +localStorage.getItem(movie.Title);
 
     React.useEffect(() => {
         let isMounted = true; 
@@ -89,25 +91,7 @@ const Profile = () => {
                     </>
                     }
                 </div>
-                {error && 
-                    <div data-testid="error-message-container" className="flex justifty-center my-20">
-                        <div className="
-                            flex 
-                            text-red-400 
-                            text-xl 
-                            bg-red-200 
-                            border-solid 
-                            border-4 
-                            border-red-500 
-                            border-opacity-25 
-                            rounded-lg 
-                            space-x-1 
-                            p-4">
-                            <span><FiAlertCircle /></span>
-                            <span>{`${error}. Try again later!`}</span>
-                        </div>
-                    </div>
-            }
+                {error && <ErrorMessage error={error} />}
             </div>
         )
 }

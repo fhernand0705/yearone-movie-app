@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { FiAlertCircle } from 'react-icons/fi';
 import { getMovies } from '../movieService';
+
+import ErrorMessage from '../ErrorMessage/component';
 
 const MovieList = () => {
     const [searchQuery, setSearchQuery] = React.useState('');
@@ -20,12 +21,15 @@ const MovieList = () => {
                 if (storedMovies && !searchQuery) {
                     setMovies(JSON.parse(storedMovies));
                 } else {
-                    if (isMounted) {
+                    if (isMounted && searchQuery) {
                         const { data } = await getMovies(searchQuery);
-                        localStorage.setItem(
-                            "storedMovies", JSON.stringify(data.Search)
-                        );
-                        setMovies(data.Search);  
+                        setMovies(data.Search); 
+
+                        if (data.Search) {
+                            localStorage.setItem(
+                                "storedMovies", JSON.stringify(data.Search)
+                            );
+                        } 
                     } 
                 }
                 
@@ -96,7 +100,7 @@ const MovieList = () => {
                             rounded-lg 
                             items-center"
                     >
-                        <li>
+                        <li key={id}>
                             <img 
                                 src={Poster} 
                                 alt={`${Title}'s poster`} 
@@ -121,25 +125,8 @@ const MovieList = () => {
                     </ul>
                 )}
             </div>
-            {error && 
-                <div data-testid="error-message-container" className="flex justifty-center my-20">
-                    <div className="
-                        flex 
-                        text-red-400 
-                        text-xl 
-                        bg-red-200 
-                        border-solid 
-                        border-4 
-                        border-red-500 
-                        border-opacity-25 
-                        rounded-lg 
-                        space-x-1 
-                        p-4">
-                        <span><FiAlertCircle /></span>
-                        <span>{`${error}. Try again later!`}</span>
-                    </div>
-                </div>
-            }
+
+            {error && <ErrorMessage error={error}/> }
         </div>
     )
 }
