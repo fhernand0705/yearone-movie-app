@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { getMovies } from '../movieService';
 
+import MovieListItem from './MovieListItem/component';
 import ErrorMessage from '../ErrorMessage/component';
 
 const MovieList = () => {
@@ -53,6 +53,10 @@ const MovieList = () => {
         setInputValue('');
     }
 
+    const renderMovieListItem = (movie) => {
+        return <MovieListItem movie={movie} />
+    }
+
     return (
         <div data-testid="movie-list-component" className="my-28">
             <form 
@@ -90,40 +94,7 @@ const MovieList = () => {
                 </button>
             </form>
             <div data-testid="movies-container" className="grid grid-cols-3 gap-4 m-5">
-                {/* extract movie details to new component */}
-                {movies && !error && movies.map(({ Title, Year, imdbID: id, Poster }, i) => 
-                    <ul 
-                        key={id} 
-                        className="
-                            flex 
-                            flex-col 
-                            rounded-lg 
-                            items-center"
-                    >
-                        <li key={id}>
-                            <img 
-                                src={Poster} 
-                                alt={`${Title}'s poster`} 
-                                className="w-72 rounded-lg"
-                            />
-                        </li>
-                        <div className="text-center my-3 w-72">
-                            <Link to={`/profile/${id}`}>
-                                <li 
-                                    key={id} 
-                                    className="
-                                        text-base 
-                                        text-gray-500 
-                                        hover:text-indigo-500 
-                                        uppercase"
-                                >
-                                    {Title}
-                                </li> 
-                            </Link> 
-                            <li key={id} className="text-lg text-gray-600">{Year}</li>
-                        </div>
-                    </ul>
-                )}
+                {movies && !error && movies.map(renderMovieListItem)}
             </div>
 
             {error && <ErrorMessage error={error}/> }

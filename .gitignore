@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 apiKey.js
-tailwind.output.css
+
 
 # testing
 /coverage
