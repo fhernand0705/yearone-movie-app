@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovie } from '../movieService';
 import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
+import { FiAlertCircle } from 'react-icons/fi'
 
 const Profile = () => {
-    const [movie, setMovie] = useState({})
-    const [thumbsUp, setThumbsUp] = useState(false)
-    const [error, setError] = useState('')
+    const [movie, setMovie] = React.useState({})
+    const [thumbsUp, setThumbsUp] = React.useState(false)
+    const [error, setError] = React.useState('')
     const { id } = useParams();
-    //const history = useHistory()
     const currentMovieUpCount = +localStorage.getItem(movie.Title)
 
-    useEffect(() => {
+    React.useEffect(() => {
         let isMounted = true; 
         const fetchMovie = async () => {
             try {
@@ -64,13 +64,9 @@ const Profile = () => {
         
         return !thumbsUp ? thumbsUpClear : thumbsUpFilled;
     }
-console.log(movie)
+
     return (
             <div data-testid="profile-component" className="my-32">
-                {/* <button onClick={() => history.push('/')} className="text-gray-500 text-base">
-                    <BsArrowBarLeft />
-                    Back
-                </button> */}
                 <div data-testid="movie-details" className="flex justify-center my-10">
                     {movie && 
                     <>
@@ -83,17 +79,35 @@ console.log(movie)
                                 </span>
                             </div>
                             <div className="text-gray-600 leading-relaxed">
-                                <div>{movie.Year}</div>
                                 <div>{movie.Director}</div>
+                                <div>{movie.Year}</div>
                                 <div>{movie.Genre}</div>
                                 <div>{`imdbRating: ${movie.imdbRating}`}</div>
-                                <div className="w-48 my-5">{movie.Plot}</div>
+                                <div className="w-80 max-w-7xl my-5">{movie.Plot}</div>
                             </div>
                         </section>
                     </>
                     }
                 </div>
-                {error && <div data-testid="error-message">{error}</div>}
+                {error && 
+                    <div data-testid="error-message-container" className="flex justifty-center my-20">
+                        <div className="
+                            flex 
+                            text-red-400 
+                            text-xl 
+                            bg-red-200 
+                            border-solid 
+                            border-4 
+                            border-red-500 
+                            border-opacity-25 
+                            rounded-lg 
+                            space-x-1 
+                            p-4">
+                            <span><FiAlertCircle /></span>
+                            <span>{`${error}. Try again later!`}</span>
+                        </div>
+                    </div>
+            }
             </div>
         )
 }

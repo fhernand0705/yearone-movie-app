@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { FiAlertCircle } from 'react-icons/fi';
 import { getMovies } from '../movieService';
 
 const MovieList = () => {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [inputValue, setInputValue] = useState('');
-    const [movies, setMovies] = useState([]);
-    const [error, setError] = useState('');
+    const [searchQuery, setSearchQuery] = React.useState('');
+    const [inputValue, setInputValue] = React.useState('');
+    const [movies, setMovies] = React.useState([]);
+    const [error, setError] = React.useState('');
 
-    useEffect(() => {
+    React.useEffect(() => {
         let isMounted = true;
 
         const fetchMovies = async () => {
@@ -122,8 +122,19 @@ const MovieList = () => {
                 )}
             </div>
             {error && 
-                <div data-testid="error-message" className="flex justifty-center my-20 ">
-                    <div className="flex text-red-400 text-xl bg-red-200 border-solid border-4 border-red-500 border-opacity-25 rounded-lg space-x-1 p-4">
+                <div data-testid="error-message-container" className="flex justifty-center my-20">
+                    <div className="
+                        flex 
+                        text-red-400 
+                        text-xl 
+                        bg-red-200 
+                        border-solid 
+                        border-4 
+                        border-red-500 
+                        border-opacity-25 
+                        rounded-lg 
+                        space-x-1 
+                        p-4">
                         <span><FiAlertCircle /></span>
                         <span>{`${error}. Try again later!`}</span>
                     </div>

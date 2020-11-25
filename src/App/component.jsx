@@ -6,7 +6,7 @@ import { BiData } from 'react-icons/bi';
 
 import MovieList from '../MovieList/component';
 import MovieProfile from '../MovieProfile/component';
-import MoviesTable from '../MoviesTable/component'
+import MovieTable from '../MovieTable/component'
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
         <Switch>
           <Route exact path="/" render={() => <MovieList />}/>  
           <Route path="/profile/:id" render={() => <MovieProfile />} />
-          <Route path="/movies-table" render={() => <MoviesTable />} />
+          <Route path="/movies-table" render={() => <MovieTable />} />
         </Switch>
       </Router>
     </div>

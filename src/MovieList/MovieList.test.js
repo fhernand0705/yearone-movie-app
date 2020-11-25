@@ -83,7 +83,7 @@ describe("mock server for api requests", () => {
             </MemoryRouter>
         )
 
-        const error = await waitFor(() => screen.getByTestId("error-message"));     
+        const error = await waitFor(() => screen.getByTestId("error-message-container"));     
         expect(error).toBeInTheDocument();
     })
 })
