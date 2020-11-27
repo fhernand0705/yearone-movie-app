@@ -26,20 +26,19 @@ const Profile = () => {
             } 
         }
 
-        fetchMovie()
+        fetchMovie();
 
         return () => isMounted = false; 
     }, [id])
 
-
     const handleThumbsUp = () => {
         setThumbsUp(up => !up);
 
-        if (thumbsUp) {            
-            if (currentMovieUpCount) {
-                localStorage.setItem(movie.Title, currentMovieUpCount - 1)
-            } 
-        } 
+        if (thumbsUp && currentMovieUpCount) {            
+            localStorage.setItem(movie.Title, currentMovieUpCount - 1) 
+        } else {
+            localStorage.removeItem(movie.Title)
+        }
 
         if (!thumbsUp) {
             if (currentMovieUpCount) {
@@ -60,9 +59,7 @@ const Profile = () => {
                                     onClick={() => handleThumbsUp()}    
                                />
         
-        if (currentMovieUpCount && !thumbsUp) {
-            setThumbsUp(true)
-        }
+        if (currentMovieUpCount && !thumbsUp) setThumbsUp(true);
         
         return !thumbsUp ? thumbsUpClear : thumbsUpFilled;
     }
@@ -71,24 +68,24 @@ const Profile = () => {
             <div data-testid="profile-component" className="my-32">
                 <div data-testid="movie-details" className="flex justify-center my-10">
                     {movie && 
-                    <>
-                        <img src={movie.Poster} alt={`${movie.Poster}'s poster`} className="rounded-lg mx-5"/>
-                        <section className="flex flex-col w-max">
-                            <div className="text-indigo-500 text-xl flex my-5 uppercase">
-                                {movie.Title} 
-                                <span className="mx-5 my-1 text-lg">
-                                    {renderThumbsUp()}
-                                </span>
-                            </div>
-                            <div className="text-gray-600 leading-relaxed">
-                                <div>{movie.Director}</div>
-                                <div>{movie.Year}</div>
-                                <div>{movie.Genre}</div>
-                                <div>{`imdbRating: ${movie.imdbRating}`}</div>
-                                <div className="w-80 max-w-7xl my-5">{movie.Plot}</div>
-                            </div>
-                        </section>
-                    </>
+                        <>
+                            <img src={movie.Poster} alt={`${movie.Poster}'s poster`} className="rounded-lg mx-5"/>
+                            <section className="flex flex-col w-max">
+                                <div className="text-indigo-500 text-xl flex my-5 uppercase">
+                                    {movie.Title} 
+                                    <span className="mx-5 my-1 text-lg">
+                                        {renderThumbsUp()}
+                                    </span>
+                                </div>
+                                <div className="text-gray-600 leading-relaxed">
+                                    <div>{movie.Director}</div>
+                                    <div>{movie.Year}</div>
+                                    <div>{movie.Genre}</div>
+                                    <div>{`imdbRating: ${movie.imdbRating}`}</div>
+                                    <div className="w-80 max-w-7xl my-5">{movie.Plot}</div>
+                                </div>
+                            </section>
+                        </>
                     }
                 </div>
                 {error && <ErrorMessage error={error} />}

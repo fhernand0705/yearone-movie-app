@@ -10,12 +10,14 @@ const MoviesTable = () => {
     const getStoredMovies = () => {
         let i = 0;
         let localKey; 
+        let count; 
         const movies = [];
 
         while (i < localStorage.length) {
-            localKey = localStorage.key(i)
+            localKey = localStorage.key(i);
+            count = localStorage.getItem(localKey);
 
-            if (localKey !== "storedMovies") {
+            if (localKey !== "storedMovies" && count > 0) {
                 movies.push({
                     title: localKey,
                     count: localStorage.getItem(localKey)
@@ -25,13 +27,11 @@ const MoviesTable = () => {
         }
         setStoredMovies(movies)
     }
-
+console.log(storedMovies)
     const renderMovies = () => {
         return (
             storedMovies
-                .filter(({count}) => {
-                return count > 0
-                })
+                .filter(({count}) => count > 0)
                 .map(movie => {
                     return (
                         <tr>
@@ -70,32 +70,32 @@ const MoviesTable = () => {
                     border-opacity-25 
                     shadow-2xl"
                 >
-                        <thead className="bg-indigo-200">
-                            <tr>
-                                <th className="
-                                    text-gray-700 
-                                    border-4 
-                                    border-indigo-800 
-                                    border-opacity-75 
-                                    text-left 
-                                    p-1"
-                                >
-                                    Movie Title
-                                </th>
-                                <th className="
-                                    text-gray-700 
-                                    border-4 
-                                    border-indigo-800 
-                                    border-opacity-75"
-                                >
-                                    Thumbs Up Count
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderMovies()}
-                        </tbody>
-                    </table>    
+                    <thead className="bg-indigo-200">
+                        <tr>
+                            <th className="
+                                text-gray-700 
+                                border-4 
+                                border-indigo-800 
+                                border-opacity-75 
+                                text-left 
+                                p-1"
+                            >
+                                Movie Title
+                            </th>
+                            <th className="
+                                text-gray-700 
+                                border-4 
+                                border-indigo-800 
+                                border-opacity-75"
+                            >
+                                Thumbs Up Count
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderMovies()}
+                    </tbody>
+                </table>    
             </div> 
         : 
         <div className="text-center text-lg my-36 text-gray-600">

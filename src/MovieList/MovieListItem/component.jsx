@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 const MovieListItem = ({ movie }) => {
-    const { Title, Poster, Year, id } = movie; 
+    const { Title, Poster, Year, imdbID: id } = movie; 
 
     return (
         <ul 

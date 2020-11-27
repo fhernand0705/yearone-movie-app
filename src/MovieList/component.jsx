@@ -39,7 +39,7 @@ const MovieList = () => {
             }    
         }   
         
-        fetchMovies();
+        fetchMovies(isMounted);
 
         return () => isMounted = false; 
 
