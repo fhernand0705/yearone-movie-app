@@ -8,6 +8,7 @@ const MovieListItem = ({ movie }) => {
         <ul 
             key={id} 
             className="flex flex-col rounded-lg items-center"
+            data-testid="list-item-component"
         >
             <li key={id}>
                 <img src={Poster} alt={`${Title}'s poster`} className="w-72 rounded-lg"/>
