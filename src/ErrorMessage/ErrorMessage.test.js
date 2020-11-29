@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 import { findByTestIdAttr, checkProps } from '../../testUtils';
-import checkPropTypes from '../../testUtils';
+import checkPropTypes from 'check-prop-types';
 
 import ErrorMessage from './component';
 
-const error = "network error";
+const error = { error: "network error"};
 
 const setup = () => {
     return render(<ErrorMessage error={error} />)
@@ -26,7 +26,9 @@ describe("check prop types", () => {
 
     test("throws a warning with unexpected props", () => {
         const unexpectedProp = 10;
-        const warning = checkPropTypes(ErrorMessage.propTypes, unexpectedProp, 'prop', ErrorMessage.name)
+        const warning = checkPropTypes(
+            ErrorMessage.propTypes, unexpectedProp, 'prop', ErrorMessage.name
+            )
 
         expect(warning).not.toBeUndefined()
     })
