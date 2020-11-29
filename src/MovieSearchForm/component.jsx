@@ -1,5 +1,6 @@
 import * as React from 'react'; 
 import { AiOutlineSearch } from 'react-icons/ai';
+import PropTypes from 'prop-types';
 
 
 const MovieSearchForm = ({ handleSubmit, inputValue, setInputValue }) => {
@@ -39,6 +40,12 @@ const MovieSearchForm = ({ handleSubmit, inputValue, setInputValue }) => {
             </button>
         </form>
     )
+}
+
+MovieSearchForm.propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    setInputValue: PropTypes.func.isRequired,
+    inputValue: PropTypes.string.isRequired
 }
 
 export default MovieSearchForm; 

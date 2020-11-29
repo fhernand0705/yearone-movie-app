@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { findByTestIdAttr } from '../../testUtils';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node'; 
@@ -26,22 +27,22 @@ describe("movie list component", () => {
     beforeEach(() => setup()); 
 
     test("renders without errors", () => {
-        const movieListComponent = screen.getByTestId("movie-list-component");
+        const movieListComponent = findByTestIdAttr("movie-list-component");
         expect(movieListComponent).toBeInTheDocument();
     })
     
     test("renders input field", () => {
-        const searchField = screen.getByTestId("input-field");
+        const searchField = findByTestIdAttr("input-field");
         expect(searchField).toBeInTheDocument();
     })
     
     test("renders submit button", () => {
-        const submitBtn = screen.getByTestId("submit-button");
+        const submitBtn = findByTestIdAttr("submit-button");
         expect(submitBtn).toBeInTheDocument();
     })
 
     test("renders form", () => {
-        const form = screen.getByTestId("form");
+        const form = findByTestIdAttr("form");
         expect(form).toBeInTheDocument()
     })
 })
@@ -50,12 +51,12 @@ describe("input field", () => {
     beforeEach(() => setup());
 
     test("default state value is an empty string", () => {
-        const searchField = screen.getByTestId("input-field");
+        const searchField = findByTestIdAttr("input-field");
         expect(searchField).toHaveValue('');
     })
 
     test("input field value updates upon onchange event", () => {
-        const searchField = screen.getByTestId("input-field");
+        const searchField = findByTestIdAttr("input-field");
         userEvent.type(searchField, "movie")
 
         expect(searchField).toHaveValue("movie");
@@ -66,7 +67,7 @@ describe("mock server for api requests", () => {
     beforeEach(() => setup()) 
 
     test("api call renders list of movies", async () => {
-        const movies = screen.getByTestId("movies-container")
+        const movies = findByTestIdAttr("movies-container")
         await waitFor(() => expect(movies.children.length).toBeGreaterThan(0))
     })
 
@@ -83,7 +84,7 @@ describe("mock server for api requests", () => {
             </MemoryRouter>
         )
 
-        const error = await waitFor(() => screen.getByTestId("error-message-container"));     
+        const error = await waitFor(() => findByTestIdAttr("error-message-container"));     
         expect(error).toBeInTheDocument();
     })
 })

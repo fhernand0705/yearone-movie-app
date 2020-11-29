@@ -1,6 +1,7 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { findByTestIdAttr } from '../../testUtils';
 import { rest } from 'msw';
 import { setupServer } from 'msw/node'; 
 import { apiKey } from '../apiKey';
@@ -32,12 +33,12 @@ describe("profile component", () => {
     beforeEach(() => setup()); 
 
     test("renders component without errors", () => {
-        const profile = screen.getByTestId("profile-component");
+        const profile = findByTestIdAttr("profile-component");
         expect(profile).toBeInTheDocument()
     })
 
     test("renders movie details container", () => {
-        const movieDetails = screen.getByTestId("movie-details");
+        const movieDetails = findByTestIdAttr("movie-details");
         expect(movieDetails).toBeInTheDocument()
     })
 })
@@ -46,23 +47,23 @@ describe("thumbs up icon", () => {
     beforeEach(() => setup())
 
     test("renders thumbs up as default icon", () => {
-        const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
+        const thumbsUpClear = findByTestIdAttr("thumbs-up-clear");
         expect(thumbsUpClear).toBeInTheDocument()
     })
 
     test("renders filled thumbs up icon when clicked", () => {
-        const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
+        const thumbsUpClear = findByTestIdAttr("thumbs-up-clear");
 
         userEvent.click(thumbsUpClear);
-        expect(screen.getByTestId("thumbs-up-filled")).toBeInTheDocument()
+        expect(findByTestIdAttr("thumbs-up-filled")).toBeInTheDocument()
     })
 })
 
 describe("mock server for api requests", () => {
-    beforeEach(() => setup())
-
     test("renders movie details", async () => {
-        const movieDetails = screen.getByTestId("movie-details");
+        setup()
+
+        const movieDetails = findByTestIdAttr("movie-details");
         await waitFor(() => expect(movieDetails.children.length).toBeGreaterThan(0))
     })
 
@@ -73,30 +74,9 @@ describe("mock server for api requests", () => {
             })
         )
         
-        render(
-            <MemoryRouter>
-                <MovieProfile />
-            </MemoryRouter>
-        )
+        setup()
 
-        const errMessage = await waitFor(() => screen.getByTestId("error-message"));
+        const errMessage = await waitFor(() => findByTestIdAttr("error-message-container"));
         expect(errMessage).toBeInTheDocument()
     })
 })
-
-// describe("thumbs up count value", () => {
-//     beforeEach(() => setup())
-
-//     test("count state has a default value of 0", () => {
-//         const counter = screen.getByTestId("count")
-//         expect(counter).toHaveTextContent(0)
-//     })
-
-//     test("clicking thumbs up increments count state", () => {
-//         const counter = screen.getByTestId("count");
-//         const thumbsUpClear = screen.getByTestId("thumbs-up-clear");
-
-//         userEvent.click(thumbsUpClear);
-//         expect(counter).toHaveTextContent(1);
-//     })
-// })

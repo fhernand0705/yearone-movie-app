@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FiAlertCircle } from 'react-icons/fi';
-
+import PropTypes from 'prop-types'; 
 
 const ErrorMessage = ({ error }) => {
     return (
@@ -25,6 +25,10 @@ const ErrorMessage = ({ error }) => {
                 </div>
             </div>
     )
+}
+
+ErrorMessage.propTypes = {
+    error: PropTypes.string.isRequired
 }
 
 export default ErrorMessage; 

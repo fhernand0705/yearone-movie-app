@@ -9,6 +9,7 @@
     "axios": "^0.21.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.1.9",
+    "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^3.11.0",
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@testing-library/user-event": "^12.2.2",
+    "check-prop-types": "^1.1.2",
     "msw": "^0.21.3"
   }
 }
