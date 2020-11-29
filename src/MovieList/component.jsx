@@ -2,7 +2,7 @@ import * as React from 'react';
 import { getMovies } from '../movieService';
 
 import MovieListItem from './MovieListItem/component';
-import MovieSearchForm from './MovieSearchForm/component'
+import MovieSearchForm from '../MovieSearchForm/component';
 import ErrorMessage from '../ErrorMessage/component';
 
 const MovieList = () => {
