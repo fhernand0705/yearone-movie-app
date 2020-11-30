@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import { checkProps, findByTestIdAttr } from '../../testUtils';
-import checkPropTypes from 'check-prop-types';
+import { checkProps, checkUnexpectedProps, findByTestIdAttr } from '../../testUtils';
 
 import MovieSearchForm from './component';
 
@@ -39,8 +38,6 @@ describe("check prop types", () => {
     })
 
     test("throws a warning with unexpected props", () => {
-        const warning = checkPropTypes(MovieSearchForm.propTypes, {}, 'prop', MovieSearchForm.name)
-
-        expect(warning).not.toBeUndefined()
+        checkUnexpectedProps(MovieSearchForm, {})
     })
 })

@@ -1,21 +1,23 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { checkProps, findByTestIdAttr } from '../../../testUtils';
+import { checkProps, checkUnexpectedProps, findByTestIdAttr } from '../../../testUtils';
 
 import MovieListItem from './component';
 
-const movie = {
-    Title: 'avengers',
-    Poster: 'www',
-    Year: 1991,
-    imdbID: 1111
+const defaultProps = {
+    movie: {
+        Title: 'avengers',
+        Poster: 'www',
+        Year: 1991,
+        imdbID: 1111
+    } 
 }
 
 const setup = () => {
     render(
         <MemoryRouter>
-            <MovieListItem movie={movie}/>
+            <MovieListItem movie={defaultProps}/>
         </MemoryRouter>
     )
 }
@@ -31,11 +33,11 @@ describe("check prop types", () => {
     beforeEach(() => setup())
 
     test("does not throw a warning with expected props", () => {
-        checkProps(MovieListItem, movie);
+        checkProps(MovieListItem, defaultProps);
     })
 
     test("throws a warning with unexpected props", () => {
-        checkProps(MovieListItem, { Title: 1, Poster: 0, Year: '1965'})
+        checkUnexpectedProps(MovieListItem, {Title: 10, Poster: 1, Year: '1990', imdbID: '0'})
     })
 })
 

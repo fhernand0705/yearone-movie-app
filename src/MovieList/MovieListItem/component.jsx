@@ -34,11 +34,11 @@ const MovieListItem = ({ movie }) => {
 
 MovieListItem.propTypes = {
     movie: PropTypes.shape({
-        Title: PropTypes.string.isRequired,
-        Poster: PropTypes.string.isRequired,
-        Year: PropTypes.number.isRequired,
-        imdbID: PropTypes.number.isRequired
-    })
+        Title: PropTypes.string,
+        Poster: PropTypes.string,
+        Year: PropTypes.number,
+        imdbID: PropTypes.number
+    }).isRequired
 }
 
 export default MovieListItem;

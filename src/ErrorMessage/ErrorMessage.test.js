@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { findByTestIdAttr, checkProps } from '../../testUtils';
+import { findByTestIdAttr, checkProps, checkUnexpectedProps } from '../../testUtils';
 import checkPropTypes from 'check-prop-types';
 
 import ErrorMessage from './component';
@@ -25,11 +25,7 @@ describe("check prop types", () => {
     })
 
     test("throws a warning with unexpected props", () => {
-        const unexpectedProp = 10;
-        const warning = checkPropTypes(
-            ErrorMessage.propTypes, unexpectedProp, 'prop', ErrorMessage.name
-            )
-
-        expect(warning).not.toBeUndefined()
+        const unexpectedProp = { error: 10 };
+        checkUnexpectedProps(ErrorMessage, unexpectedProp)
     })
 })

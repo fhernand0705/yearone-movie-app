@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import { findByTestIdAttr } from '../../testUtils';
 import userEvent from '@testing-library/user-event';
 import { rest } from 'msw';
@@ -64,9 +64,8 @@ describe("input field", () => {
 })
 
 describe("mock server for api requests", () => {
-    beforeEach(() => setup()) 
-
     test("api call renders list of movies", async () => {
+        setup()
         const movies = findByTestIdAttr("movies-container")
         await waitFor(() => expect(movies.children.length).toBeGreaterThan(0))
     })
