@@ -1,17 +1,29 @@
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovie } from '../movieService';
-import { FaRegThumbsUp, FaThumbsUp } from 'react-icons/fa';
+import { 
+    FaRegThumbsUp, 
+    FaThumbsUp, 
+    FaRegThumbsDown, 
+    FaThumbsDown } 
+from 'react-icons/fa';
+//import './style.css';
 
 import ErrorMessage from '../ErrorMessage/component';
 
 const Profile = () => {
     const [movie, setMovie] = React.useState({});
     const [thumbsUp, setThumbsUp] = React.useState(false);
+    const [thumbsDown, setThumbsDown] = React.useState(false);
     const [error, setError] = React.useState('');
     
     const { id } = useParams();
-    const currentMovieUpCount = +localStorage.getItem(movie.Title);
+    const data = localStorage.getItem(movie.Title);
+    const currentMovieCount = JSON.parse(data);
+
+    const styles = {
+        outline: "none"
+    }
 
     React.useEffect(() => {
         let isMounted = true; 
@@ -34,35 +46,69 @@ const Profile = () => {
     const handleThumbsUp = () => {
         setThumbsUp(up => !up);
 
-        if (thumbsUp && currentMovieUpCount) {            
-            localStorage.setItem(movie.Title, currentMovieUpCount - 1) 
-        } else {
-            localStorage.removeItem(movie.Title)
-        }
+        // if (thumbsUp && currentMovieCount) {            
+        //     localStorage.setItem(
+        //         movie.Title, 
+        //         JSON.stringify({up: currentMovieCount['up'] - 1})
+        //     ) 
+        // } 
 
-        if (!thumbsUp) {
-            if (currentMovieUpCount) {
-                localStorage.setItem(movie.Title, currentMovieUpCount + 1)
-            } else {
-                localStorage.setItem(movie.Title, +"1")
-            }
-        }    
+        // if (!thumbsUp) {
+        //     if (currentMovieCount) {
+        //         localStorage.setItem(
+        //             movie.Title, 
+        //             JSON.stringify({up: currentMovieCount['up'] + 1 })
+        //         )
+        //     } else {
+        //         localStorage.setItem(movie.Title, JSON.stringify({up: 1}))
+        //     }
+        // }    
+    }
+
+    const handleThumbsDown = () => {
+        setThumbsDown(down => !down);
+
+        // if (thumbsDown && currentMovieCount) {            
+        //     sessionStorage.setItem(movie.Title, currentMovieCount - 1) 
+        // } else {
+        //     sessionStorage.removeItem(movie.Title)
+        // }
+
+        // if (!thumbsDown) {
+        //     if (currentMovieCount) {
+        //         localStorage.setItem(
+        //             movie.Title, 
+        //             JSON.stringify({down: currentMovieCount['down'] + 1 })
+        //         )
+        //     } else {
+        //         localStorage.setItem(movie.Title, JSON.stringify({down: 1}))
+        //     }
+        // }    
     }
 
     const renderThumbsUp = () => {
-        const thumbsUpClear = <FaRegThumbsUp 
-                                    data-testid="thumbs-up-clear"
-                                    onClick={() => handleThumbsUp()}    
-                              />
-        const thumbsUpFilled = <FaThumbsUp 
-                                    data-testid="thumbs-up-filled"
-                                    onClick={() => handleThumbsUp()}    
-                               />
+        const thumbsUpDefault = <FaRegThumbsUp data-testid="thumbs-up-default" />
+        const thumbsUpFilled = <FaThumbsUp data-testid="thumbs-up-filled" />
         
-        if (currentMovieUpCount && !thumbsUp) setThumbsUp(true);
+        if (currentMovieCount && !thumbsUp && !thumbsDown) setThumbsUp(true);
         
-        return !thumbsUp ? thumbsUpClear : thumbsUpFilled;
+        return !thumbsUp ? thumbsUpDefault : thumbsUpFilled;
     }
+
+    const renderThumbsDown = () => {
+        const thumbsDownDefault = <FaRegThumbsDown 
+                                    data-testid="thumbs-down-default"
+                                  />
+        const thumbsDownFilled = <FaThumbsDown 
+                                    data-testid="thumbs-down-filled"
+                                  />
+        
+        if (currentMovieCount && !thumbsDown && !thumbsUp) setThumbsDown(true);
+        
+        return !thumbsDown ? thumbsDownDefault : thumbsDownFilled;
+    }
+
+    const disabled = true; 
 
     return (
             <div data-testid="profile-component" className="my-32">
@@ -73,9 +119,24 @@ const Profile = () => {
                             <section className="flex flex-col w-max">
                                 <div className="text-indigo-500 text-xl flex my-5 uppercase">
                                     {movie.Title} 
-                                    <span className="mx-5 my-1 text-lg">
+                                    <button 
+                                        type="button" 
+                                        className="mx-5 my-1 text-lg" 
+                                        style={styles}
+                                        disabled={thumbsDown && disabled} 
+                                        onClick={() => handleThumbsUp()}
+                                    >
                                         {renderThumbsUp()}
-                                    </span>
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        className="mx-5 my-1 text-lg"
+                                        style={styles} 
+                                        disabled={thumbsUp && disabled} 
+                                        onClick={() => handleThumbsDown()}
+                                    >
+                                        {renderThumbsDown()}
+                                    </button>
                                 </div>
                                 <div className="text-gray-600 leading-relaxed">
                                     <div>{movie.Director}</div>
@@ -86,6 +147,7 @@ const Profile = () => {
                                 </div>
                             </section>
                         </>
+                            
                     }
                 </div>
                 {error && <ErrorMessage error={error} />}

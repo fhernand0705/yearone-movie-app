@@ -47,14 +47,14 @@ describe("thumbs up icon", () => {
     beforeEach(() => setup())
 
     test("renders thumbs up as default icon", () => {
-        const thumbsUpClear = findByTestIdAttr("thumbs-up-clear");
-        expect(thumbsUpClear).toBeInTheDocument()
+        const thumbsUpDefault = findByTestIdAttr("thumbs-up-default");
+        expect(thumbsUpDefault).toBeInTheDocument()
     })
 
     test("renders filled thumbs up icon when clicked", () => {
-        const thumbsUpClear = findByTestIdAttr("thumbs-up-clear");
+        const thumbsUpDefault = findByTestIdAttr("thumbs-up-default");
 
-        userEvent.click(thumbsUpClear);
+        userEvent.click(thumbsUpDefault);
         expect(findByTestIdAttr("thumbs-up-filled")).toBeInTheDocument()
     })
 })
