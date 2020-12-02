@@ -9,8 +9,8 @@ const defaultProps = {
     movie: {
         Title: 'avengers',
         Poster: 'www',
-        Year: 1991,
-        imdbID: 1111
+        Year: '1991',
+        imdbID: '1111'
     } 
 }
 
@@ -37,7 +37,10 @@ describe("check prop types", () => {
     })
 
     test("throws a warning with unexpected props", () => {
-        checkUnexpectedProps(MovieListItem, {Title: 10, Poster: 1, Year: '1990', imdbID: '0'})
+        checkUnexpectedProps(
+            MovieListItem, 
+            {Title: 10, Poster: 1, Year: 1990, imdbID: 0}
+        )
     })
 })
 

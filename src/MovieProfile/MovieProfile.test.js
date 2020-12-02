@@ -43,7 +43,7 @@ describe("profile component", () => {
     })
 })
 
-describe("thumbs up icon", () => {
+describe("thumbs up/down icon", () => {
     beforeEach(() => setup())
 
     test("renders thumbs up as default icon", () => {
@@ -52,10 +52,22 @@ describe("thumbs up icon", () => {
     })
 
     test("renders filled thumbs up icon when clicked", () => {
-        const thumbsUpDefault = findByTestIdAttr("thumbs-up-default");
+        const thumbsUpButton = findByTestIdAttr("thumbs-up-button");
 
-        userEvent.click(thumbsUpDefault);
+        userEvent.click(thumbsUpButton);
         expect(findByTestIdAttr("thumbs-up-filled")).toBeInTheDocument()
+    })
+
+    test("renders thumbs down as default icon", () => {
+        const thumbsDownDefault = findByTestIdAttr("thumbs-down-default");
+        expect(thumbsDownDefault).toBeInTheDocument()
+    })
+
+    test("renders filled thumbs down icon when clicked", () => {
+        const thumbsDownButton = findByTestIdAttr("thumbs-down-button");
+
+        userEvent.click(thumbsDownButton);
+        expect(findByTestIdAttr("thumbs-down-filled")).toBeInTheDocument()
     })
 })
 

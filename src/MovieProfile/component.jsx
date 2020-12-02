@@ -136,6 +136,7 @@ const Profile = () => {
                                     {movie.Title} 
                                     <button 
                                         type="button" 
+                                        data-testid="thumbs-up-button"
                                         className="mx-5 my-1 text-lg" 
                                         style={styles}
                                         disabled={thumbsDown && disabled} 
@@ -145,6 +146,7 @@ const Profile = () => {
                                     </button>
                                     <button 
                                         type="button" 
+                                        data-testid="thumbs-down-button"
                                         className="mx-5 my-1 text-lg"
                                         style={styles} 
                                         disabled={thumbsUp && disabled} 
