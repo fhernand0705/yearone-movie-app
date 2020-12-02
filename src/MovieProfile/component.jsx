@@ -7,7 +7,6 @@ import {
     FaRegThumbsDown, 
     FaThumbsDown } 
 from 'react-icons/fa';
-//import './style.css';
 
 import ErrorMessage from '../ErrorMessage/component';
 
@@ -15,24 +14,40 @@ const Profile = () => {
     const [movie, setMovie] = React.useState({});
     const [thumbsUp, setThumbsUp] = React.useState(false);
     const [thumbsDown, setThumbsDown] = React.useState(false);
+    const [thumbsUpCount, setThumbsUpCount] = React.useState(0);
+    const [thumbsDownCount, setThumbsDownCount] = React.useState(0);
     const [error, setError] = React.useState('');
     
     const { id } = useParams();
-    const data = localStorage.getItem(movie.Title);
-    const currentMovieCount = JSON.parse(data);
-
-    const styles = {
-        outline: "none"
-    }
+    const styles = { outline: "none" }
 
     React.useEffect(() => {
         let isMounted = true; 
         const fetchMovie = async () => {
             try {
                 const { data } = await getMovie(id);
-                if (isMounted) setMovie(data);
-    
+                const localMovie = JSON.parse(localStorage.getItem('movie'))
+                const localMovieCounts = JSON.parse(
+                    localStorage.getItem(localMovie.Title)
+                )
+                
+                if (isMounted) {
+                    if (localMovie) {
+                        setMovie(localMovie);
+                      
+                        if (localMovieCounts) {
+                            setThumbsUpCount(localMovieCounts.up)
+                            setThumbsDownCount(localMovieCounts.down)
+                        }
+
+                    } else {
+                        setMovie(data);
+                        localStorage.setItem('movie', JSON.stringify(data));
+                    }
+                } 
+                
                 return null;
+
             } catch(err) {
                 if (err) setError(err.message)
             } 
@@ -43,67 +58,79 @@ const Profile = () => {
         return () => isMounted = false; 
     }, [id])
 
+    const currentMovieCount = JSON.parse(localStorage.getItem(movie.Title));
+    
+    // extract handleThumbsUp/down implementation into a separate function 
     const handleThumbsUp = () => {
         setThumbsUp(up => !up);
 
-        // if (thumbsUp && currentMovieCount) {            
-        //     localStorage.setItem(
-        //         movie.Title, 
-        //         JSON.stringify({up: currentMovieCount['up'] - 1})
-        //     ) 
-        // } 
+        if (thumbsUp && currentMovieCount) {            
+            localStorage.setItem(
+                movie.Title, 
+                JSON.stringify({...currentMovieCount, up: currentMovieCount['up'] - 1})
+            )
+            setThumbsUpCount(upCount => upCount - 1) 
+        } 
 
-        // if (!thumbsUp) {
-        //     if (currentMovieCount) {
-        //         localStorage.setItem(
-        //             movie.Title, 
-        //             JSON.stringify({up: currentMovieCount['up'] + 1 })
-        //         )
-        //     } else {
-        //         localStorage.setItem(movie.Title, JSON.stringify({up: 1}))
-        //     }
-        // }    
+        if (!thumbsUp) {
+            if (currentMovieCount) {
+                localStorage.setItem(
+                    movie.Title, 
+                    JSON.stringify({
+                        ...currentMovieCount, 
+                        up: (currentMovieCount['up'] || 0) + 1 
+                    })
+                )
+                setThumbsUpCount(upCount => upCount + 1) 
+            } else {
+                localStorage.setItem(movie.Title, JSON.stringify({ up: 1 }))
+            }
+        }    
     }
 
     const handleThumbsDown = () => {
         setThumbsDown(down => !down);
 
-        // if (thumbsDown && currentMovieCount) {            
-        //     sessionStorage.setItem(movie.Title, currentMovieCount - 1) 
-        // } else {
-        //     sessionStorage.removeItem(movie.Title)
-        // }
+        if (thumbsDown && currentMovieCount) {            
+            localStorage.setItem(
+                movie.Title, 
+                JSON.stringify({
+                    ...currentMovieCount, down: currentMovieCount['down'] - 1
+                })
+            )
+            setThumbsDownCount(downCount => downCount - 1); 
+        } 
 
-        // if (!thumbsDown) {
-        //     if (currentMovieCount) {
-        //         localStorage.setItem(
-        //             movie.Title, 
-        //             JSON.stringify({down: currentMovieCount['down'] + 1 })
-        //         )
-        //     } else {
-        //         localStorage.setItem(movie.Title, JSON.stringify({down: 1}))
-        //     }
-        // }    
+        if (!thumbsDown) {
+            if (currentMovieCount) {
+                localStorage.setItem(
+                    movie.Title, 
+                    JSON.stringify({
+                        ...currentMovieCount, 
+                        down: (currentMovieCount['down'] || 0) + 1 
+                    })
+                )
+                setThumbsDownCount(downCount => downCount + 1);
+            } else {
+                localStorage.setItem(movie.Title, JSON.stringify({ down: 1 }))
+            }
+        }    
     }
 
     const renderThumbsUp = () => {
         const thumbsUpDefault = <FaRegThumbsUp data-testid="thumbs-up-default" />
         const thumbsUpFilled = <FaThumbsUp data-testid="thumbs-up-filled" />
         
-        if (currentMovieCount && !thumbsUp && !thumbsDown) setThumbsUp(true);
+        if (thumbsUpCount > 0 && !thumbsUp) setThumbsUp(true);
         
         return !thumbsUp ? thumbsUpDefault : thumbsUpFilled;
     }
 
     const renderThumbsDown = () => {
-        const thumbsDownDefault = <FaRegThumbsDown 
-                                    data-testid="thumbs-down-default"
-                                  />
-        const thumbsDownFilled = <FaThumbsDown 
-                                    data-testid="thumbs-down-filled"
-                                  />
+        const thumbsDownDefault = <FaRegThumbsDown data-testid="thumbs-down-default" />
+        const thumbsDownFilled = <FaThumbsDown data-testid="thumbs-down-filled" />
         
-        if (currentMovieCount && !thumbsDown && !thumbsUp) setThumbsDown(true);
+        if (thumbsDownCount > 0 && !thumbsDown) setThumbsDown(true);
         
         return !thumbsDown ? thumbsDownDefault : thumbsDownFilled;
     }
@@ -115,9 +142,19 @@ const Profile = () => {
                 <div data-testid="movie-details" className="flex justify-center my-10">
                     {movie && 
                         <>
-                            <img src={movie.Poster} alt={`${movie.Poster}'s poster`} className="rounded-lg mx-5"/>
+                            <img 
+                                src={movie.Poster} 
+                                alt={`${movie.Poster}'s poster`} 
+                                className="rounded-lg mx-5"
+                            />
                             <section className="flex flex-col w-max">
-                                <div className="text-indigo-500 text-xl flex my-5 uppercase">
+                                <div className="
+                                    text-indigo-500 
+                                    text-xl 
+                                    flex 
+                                    my-5 
+                                    uppercase"
+                                >
                                     {movie.Title} 
                                     <button 
                                         type="button" 
@@ -146,8 +183,7 @@ const Profile = () => {
                                     <div className="w-80 max-w-7xl my-5">{movie.Plot}</div>
                                 </div>
                             </section>
-                        </>
-                            
+                        </>      
                     }
                 </div>
                 {error && <ErrorMessage error={error} />}
