@@ -15,23 +15,27 @@ const MoviesTable = () => {
 
         while (i < localStorage.length) {
             localKey = localStorage.key(i);
-            count = localStorage.getItem(localKey);
+            count = JSON.parse(localStorage.getItem(localKey));
 
-            if (localKey !== "storedMovies" && count > 0) {
+            if ((localKey !== "storedMovies" && localKey !== "movie") && count) {
                 movies.push({
                     title: localKey,
-                    count: localStorage.getItem(localKey)
+                    up: count.up || 0,
+                    down: count.down || 0
                 })
             }
             i++
         }
+
         setStoredMovies(movies)
     }
-console.log(storedMovies)
+
     const renderMovies = () => {
         return (
             storedMovies
-                .filter(({count}) => count > 0)
+                .filter(({up, down}) => {
+                    return up > 0 || down > 0;
+                })
                 .map(movie => {
                     return (
                         <tr>
@@ -49,7 +53,15 @@ console.log(storedMovies)
                                 border-indigo-800 
                                 border-opacity-50 
                                 text-center">
-                                    {movie.count}
+                                    {movie.up}
+                            </td>
+                            <td className="
+                                text-gray-600 
+                                border-4 
+                                border-indigo-800 
+                                border-opacity-50 
+                                text-center">
+                                    {movie.down}
                             </td>
                         </tr>
                     )        
@@ -89,6 +101,14 @@ console.log(storedMovies)
                                 border-opacity-75"
                             >
                                 Thumbs Up Count
+                            </th>
+                            <th className="
+                                text-gray-700 
+                                border-4 
+                                border-indigo-800 
+                                border-opacity-75"
+                            >
+                                Thumbs Down Count
                             </th>
                         </tr>
                     </thead>
