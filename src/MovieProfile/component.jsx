@@ -60,61 +60,39 @@ const Profile = () => {
 
     const currentMovieCount = JSON.parse(localStorage.getItem(movie.Title));
     
-    // extract handleThumbsUp/down implementation into a separate function 
-    const handleThumbsUp = () => {
-        setThumbsUp(up => !up);
-
-        if (thumbsUp && currentMovieCount) {            
+    const storeThumbsCount = (thumbs, setThumbsCount, direction) => {
+        if (thumbs && currentMovieCount) {            
             localStorage.setItem(
                 movie.Title, 
-                JSON.stringify({...currentMovieCount, up: currentMovieCount['up'] - 1})
+                JSON.stringify({...currentMovieCount, [direction]: currentMovieCount[direction] - 1})
             )
-            setThumbsUpCount(upCount => upCount - 1) 
+            setThumbsCount(count => count - 1) 
         } 
 
-        if (!thumbsUp) {
+        if (!thumbs) {
             if (currentMovieCount) {
                 localStorage.setItem(
                     movie.Title, 
                     JSON.stringify({
                         ...currentMovieCount, 
-                        up: (currentMovieCount['up'] || 0) + 1 
+                        [direction]: (currentMovieCount[direction] || 0) + 1 
                     })
                 )
-                setThumbsUpCount(upCount => upCount + 1) 
+                setThumbsCount(count => count + 1) 
             } else {
-                localStorage.setItem(movie.Title, JSON.stringify({ up: 1 }))
+                localStorage.setItem(movie.Title, JSON.stringify({ [direction]: 1 }))
             }
-        }    
+        }
+    }
+
+    const handleThumbsUp = () => {
+        setThumbsUp(up => !up);
+        storeThumbsCount(thumbsUp, setThumbsUpCount, "up")    
     }
 
     const handleThumbsDown = () => {
         setThumbsDown(down => !down);
-
-        if (thumbsDown && currentMovieCount) {            
-            localStorage.setItem(
-                movie.Title, 
-                JSON.stringify({
-                    ...currentMovieCount, down: currentMovieCount['down'] - 1
-                })
-            )
-            setThumbsDownCount(downCount => downCount - 1); 
-        } 
-
-        if (!thumbsDown) {
-            if (currentMovieCount) {
-                localStorage.setItem(
-                    movie.Title, 
-                    JSON.stringify({
-                        ...currentMovieCount, 
-                        down: (currentMovieCount['down'] || 0) + 1 
-                    })
-                )
-                setThumbsDownCount(downCount => downCount + 1);
-            } else {
-                localStorage.setItem(movie.Title, JSON.stringify({ down: 1 }))
-            }
-        }    
+        storeThumbsCount(thumbsDown, setThumbsDownCount, "down")    
     }
 
     const renderThumbsUp = () => {
