@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { getMovies } from '../movieService';
+import { AiOutlineArrowUp } from 'react-icons/ai';
 
 import MovieListItem from './MovieListItem/component';
 import MovieSearchForm from '../MovieSearchForm/component';
@@ -45,7 +46,6 @@ const MovieList = () => {
 
     }, [searchQuery])
 
-
     const handleSubmit = (e) => {
         e.preventDefault();
         
@@ -65,9 +65,25 @@ const MovieList = () => {
                 setInputValue={setInputValue}
             />
 
-            <div data-testid="movies-container" className="grid grid-cols-3 gap-4 m-5">
-                {movies && !error && movies.map(renderMovieListItem)}
-            </div>
+            {movies.length && !error ? 
+                <div data-testid="movies-container">
+                    <ul 
+                        className="
+                            grid 
+                            grid-cols-3 
+                            gap-4 
+                            m-5 
+                            justify-items-center"
+                    >      
+                        {movies.map(renderMovieListItem)}
+                    </ul>
+                </div>
+                : 
+                <div className="flex flex-col items-center my-24 text-3xl text-gray-500">
+                    <AiOutlineArrowUp className="animate-bounce"/>
+                    Type in a movie title and click search
+                </div> 
+            }
 
             {error && <ErrorMessage error={error}/> }
         </div>
