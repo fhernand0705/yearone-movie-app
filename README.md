@@ -15,7 +15,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `application GIF`
 
-![](movie-app.gif)
+![](movie-app.gif =300x300)
 
 
 
