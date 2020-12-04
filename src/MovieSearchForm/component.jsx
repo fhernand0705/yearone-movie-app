@@ -8,7 +8,7 @@ const MovieSearchForm = ({ handleSubmit, inputValue, setInputValue }) => {
         <form 
             onSubmit={handleSubmit} 
             data-testid="form" 
-            className="flex justify-center my-12"
+            className="flex justify-center my-22"
         >
             <input 
                 type="text" 
