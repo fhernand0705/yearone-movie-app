@@ -26,22 +26,16 @@ const Profile = () => {
         const fetchMovie = async () => {
             try {
                 const { data } = await getMovie(id);
-                const localMovie = JSON.parse(localStorage.getItem('movie'))
+                const localMovie = JSON.parse(localStorage.getItem('movie'));
                 
                 if (isMounted) {
                     if (localMovie && localMovie.imdbID === data.imdbID) {
                         setMovie(localMovie)
-                        
-                        const localMovieCounts = JSON.parse(
-                            localStorage.getItem(localMovie.Title)
-                        )
-                      
-                        setThumbsUpCount(localMovieCounts.up)
-                        setThumbsDownCount(localMovieCounts.down)
-                        
+                        storeLocalMovieThumbsCount(localMovie.Title) 
                     } else {
                         setMovie(data);
                         localStorage.setItem('movie', JSON.stringify(data));
+                        storeLocalMovieThumbsCount(data.Title)
                     }
                 } 
                 
@@ -56,10 +50,21 @@ const Profile = () => {
 
         return () => isMounted = false; 
     }, [id])
-console.log(thumbsUpCount)
+
+    const storeLocalMovieThumbsCount = (movieTitle) => {
+        let localMovieCounts = JSON.parse(
+            localStorage.getItem(movieTitle)
+        )
+
+        if (localMovieCounts) {
+            setThumbsDownCount(localMovieCounts.down)
+            setThumbsUpCount(localMovieCounts.up)
+        }
+    }
+
     const currentMovieCount = JSON.parse(localStorage.getItem(movie.Title));
     
-    const storeThumbsCount = (thumbs, setThumbsCount, direction) => {
+    const storeNewMovieThumbsCount = (thumbs, setThumbsCount, direction) => {
         if (thumbs && currentMovieCount) {            
             localStorage.setItem(
                 movie.Title, 
@@ -86,12 +91,12 @@ console.log(thumbsUpCount)
 
     const handleThumbsUp = () => {
         setThumbsUp(up => !up);
-        storeThumbsCount(thumbsUp, setThumbsUpCount, "up")    
+        storeNewMovieThumbsCount(thumbsUp, setThumbsUpCount, "up")    
     }
 
     const handleThumbsDown = () => {
         setThumbsDown(down => !down);
-        storeThumbsCount(thumbsDown, setThumbsDownCount, "down")    
+        storeNewMovieThumbsCount(thumbsDown, setThumbsDownCount, "down")    
     }
 
     const renderThumbsUp = () => {
@@ -117,7 +122,7 @@ console.log(thumbsUpCount)
     return (
             <div data-testid="profile-component" className="my-32">
                 <div data-testid="movie-details" className="flex justify-center my-10">
-                    {movie && 
+                    {movie && !error &&
                         <>
                             <img 
                                 src={movie.Poster} 

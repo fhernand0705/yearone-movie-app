@@ -6,7 +6,7 @@ const ErrorMessage = ({ error }) => {
     return (
             <div 
                 data-testid="error-message-container" 
-                className="flex justifty-center my-20"
+                className="flex justify-center my-20"
             >
                 <div className="
                     flex 
