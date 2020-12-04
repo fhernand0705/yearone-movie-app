@@ -15,7 +15,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `application GIF`
 
-![](http://g.recordit.co/TCbP1DiOTJ.gif =300x300)
+-![](http://g.recordit.co/TCbP1DiOTJ.gif)
 
 
 
