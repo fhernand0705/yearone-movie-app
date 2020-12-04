@@ -1,7 +1,12 @@
 import * as React from 'react';
+import { BsArrowBarLeft } from 'react-icons/bs';
+import { useHistory } from 'react-router-dom';
 
 const MoviesTable = () => {
-    const [storedMovies, setStoredMovies] = React.useState([])
+    const [storedMovies, setStoredMovies] = React.useState([]);
+    const history = useHistory();
+
+    const styles = { outline: "none" };
 
     React.useEffect(() => {
         getStoredMovies();
@@ -71,57 +76,70 @@ const MoviesTable = () => {
 
     return (
         <>
-        {storedMovies.length ?
-            <div 
-                data-testid="movies-table-component" 
-                className="flex flex-col items-center my-36"
+            <button 
+                data-testid="back-button"
+                style={styles}
+                className="flex text-xl text-gray-500 mt-32 mx-10 hover:text-indigo-500" 
+                onClick={() => history.goBack() }
             >
-                <table className="
-                    border-4 
-                    border-indigo-800 
-                    border-opacity-25 
-                    shadow-2xl"
+                <BsArrowBarLeft />    
+                <span className="text-lg">Back</span>
+            </button>
+
+            {storedMovies.length ?
+                <div 
+                    data-testid="movies-table-component" 
+                    className="flex flex-col items-center mt-8"
                 >
-                    <thead className="bg-indigo-200">
-                        <tr>
-                            <th className="
-                                text-gray-700 
-                                border-4 
-                                border-indigo-800 
-                                border-opacity-75 
-                                text-left 
-                                p-1"
-                            >
-                                Movie Title
-                            </th>
-                            <th className="
-                                text-gray-700 
-                                border-4 
-                                border-indigo-800 
-                                border-opacity-75"
-                            >
-                                Thumbs Up Count
-                            </th>
-                            <th className="
-                                text-gray-700 
-                                border-4 
-                                border-indigo-800 
-                                border-opacity-75"
-                            >
-                                Thumbs Down Count
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderMovies()}
-                    </tbody>
-                </table>    
-            </div> 
-        : 
-        <div className="text-center text-lg my-36 text-gray-600">
-            Movie data is currently not available...
-        </div>
-      }
+                    <table className="
+                        border-4 
+                        border-indigo-800 
+                        border-opacity-25 
+                        shadow-2xl"
+                    >
+                        <thead className="bg-indigo-200">
+                            <tr>
+                                <th className="
+                                    text-gray-700 
+                                    border-4 
+                                    border-indigo-800 
+                                    border-opacity-75 
+                                    text-left 
+                                    p-1"
+                                >
+                                    Movie Title
+                                </th>
+                                <th className="
+                                    text-gray-700 
+                                    border-4 
+                                    border-indigo-800 
+                                    border-opacity-75"
+                                >
+                                    Thumbs Up Count
+                                </th>
+                                <th className="
+                                    text-gray-700 
+                                    border-4 
+                                    border-indigo-800 
+                                    border-opacity-75"
+                                >
+                                    Thumbs Down Count
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {renderMovies()}
+                        </tbody>
+                    </table>    
+                </div> 
+            : 
+            <div 
+                data-testid="no-data-message" 
+                className="text-center text-lg my-36 text-gray-600"
+            >
+                Movie data is currently not available...
+            </div>
+        }
         </> 
     )
 }
