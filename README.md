@@ -15,7 +15,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `application GIF`
 
-![](https://g.recordit.co/TCbP1DiOTJ.gif)
+![](https://media1.tenor.com/images/465a5d292b5b41dcd2b001df8bbf5967/tenor.gif?itemid=5055890)
 
 
 
