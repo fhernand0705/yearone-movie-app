@@ -74,7 +74,7 @@ const MoviesTable = () => {
         {storedMovies.length ?
             <div 
                 data-testid="movies-table-component" 
-                className="flex justify-center my-36"
+                className="flex flex-col items-center my-36"
             >
                 <table className="
                     border-4 

@@ -8,21 +8,26 @@ const MovieListItem = ({ movie }) => {
     return (
         <div data-testid="list-item-component" className="container w-min">
             <li key={id} >
-                <img src={Poster} alt={`${Title}'s poster`} className="w-72 rounded-lg"/>
+                <img 
+                    src={Poster} 
+                    alt={`${Title}'s poster`} 
+                    className="w-44 md:w-64 rounded-lg"
+                />
             </li>
-            <div className="text-center my-3 w-72">
+            <div className="text-center my-3 w-44 md:w-64">
                 <Link to={`/profile/${id}`}>
                     <li key={id} 
                         className="
-                        text-base 
+                        text-xs
+                        md:text-base 
                         text-gray-500 
                         hover:text-indigo-500 
-                        "
+                        uppercase"
                     >
                         {Title}
                     </li> 
                 </Link> 
-                <li key={id} className="text-lg text-gray-600">{Year}</li>
+                <li key={id} className="text-sm md:text-lg text-gray-600">{Year}</li>
             </div>
         </div>    
     )

@@ -69,9 +69,10 @@ const MovieList = () => {
                 <div data-testid="movies-container">
                     <ul 
                         className="
-                            grid 
-                            grid-cols-3 
-                            gap-4 
+                            grid
+                            grid-cols-2 
+                            md:grid-cols-3 
+                            gap-3
                             m-5 
                             justify-items-center"
                     >      

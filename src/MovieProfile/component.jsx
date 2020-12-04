@@ -27,19 +27,18 @@ const Profile = () => {
             try {
                 const { data } = await getMovie(id);
                 const localMovie = JSON.parse(localStorage.getItem('movie'))
-                const localMovieCounts = JSON.parse(
-                    localStorage.getItem(localMovie.Title)
-                )
                 
                 if (isMounted) {
-                    if (localMovie) {
-                        setMovie(localMovie);
+                    if (localMovie && localMovie.imdbID === data.imdbID) {
+                        setMovie(localMovie)
+                        
+                        const localMovieCounts = JSON.parse(
+                            localStorage.getItem(localMovie.Title)
+                        )
                       
-                        if (localMovieCounts) {
-                            setThumbsUpCount(localMovieCounts.up)
-                            setThumbsDownCount(localMovieCounts.down)
-                        }
-
+                        setThumbsUpCount(localMovieCounts.up)
+                        setThumbsDownCount(localMovieCounts.down)
+                        
                     } else {
                         setMovie(data);
                         localStorage.setItem('movie', JSON.stringify(data));
@@ -57,7 +56,7 @@ const Profile = () => {
 
         return () => isMounted = false; 
     }, [id])
-
+console.log(thumbsUpCount)
     const currentMovieCount = JSON.parse(localStorage.getItem(movie.Title));
     
     const storeThumbsCount = (thumbs, setThumbsCount, direction) => {
